@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="SignalRChatApp.View.ContactsPage"
+    x:Name="rootPage"
+    xmlns:Vm="clr-namespace:SignalRChatApp.ViewModel">
+
+    <ContentPage.BindingContext>
+        <Vm:ContactsViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <CollectionView>
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame>
+                        <Grid>
+                            <Label Text="{Binding UserName}" />
+                        </Grid>
+                        <Frame.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ChatCommand, Source={x:Reference rootPage}}" CommandParameter="{Binding}" />
+                        </Frame.GestureRecognizers>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </ContentPage.Content>
+</ContentPage>
