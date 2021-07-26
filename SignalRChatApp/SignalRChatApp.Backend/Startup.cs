@@ -1,7 +1,3 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SignalRChatApp.Backend.Hubs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SignalRChatApp.Backend
 {
@@ -28,21 +28,11 @@ namespace SignalRChatApp.Backend
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //var key = System.Text.Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value);
-
             services.AddControllers();
             services.AddSignalR();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SignalRChantApp.Backend", Version = "v1" });
-                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-                //c.OperationFilter<SecurityRequirementsOperationFilter>();
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SignalRChatApp.Backend", Version = "v1" });
             });
 
             services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
@@ -53,62 +43,23 @@ namespace SignalRChatApp.Backend
             }));
 
             services.AddHttpClient();
-
-            //var tokenValidationParams = new TokenValidationParameters
-            //{
-            //    ValidateIssuerSigningKey = true,
-            //    IssuerSigningKey = new SymmetricSecurityKey(key),
-            //    ValidateIssuer = false,
-            //    ValidateAudience = false,
-            //    ValidateLifetime = true,
-            //    RequireExpirationTime = false,
-            //    ClockSkew = TimeSpan.Zero
-            //};
-
-            //services.AddSingleton(tokenValidationParams);
-
-            //services.AddSingleton(typeof(IApplicationController), new ApplicationController(GetApplicationSettings()));
-
-            //services.AddScoped<IAuthService, AuthService>();
-            //services.AddScoped<IAuthRepository, AuthRepository>();
-
-            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            //    .AddJwtBearer(options =>
-            //    {
-            //        options.SaveToken = true;
-            //        options.TokenValidationParameters = tokenValidationParams;
-            //    });
-
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c =>
-                {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "SignalRChantApp.Backend v1");
-                    //c.RoutePrefix = string.Empty;
-                });
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SignalRChatApp.Backend v1"));
             }
 
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthentication();
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
 
             app.UseCors("CorsPolicy");
             app.UseEndpoints(endpoints =>
@@ -119,17 +70,5 @@ namespace SignalRChatApp.Backend
 
             app.Run(async (context) => await Task.Run(() => context.Response.Redirect("/swagger")));
         }
-
-        //private ApplicationSettings GetApplicationSettings()
-        //{
-        //    var config = new ConfigurationBuilder()
-        //        .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-        //        .AddJsonFile("appsettings.json").Build();
-
-
-        //    var section = config.GetSection(nameof(ApplicationSettings));
-        //    var result = section.Get<ApplicationSettings>();
-        //    return result;
-        //}
     }
 }
